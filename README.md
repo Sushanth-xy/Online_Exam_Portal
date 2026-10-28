@@ -3,10 +3,17 @@
 A comprehensive and secure web portal for conducting, proctoring, and grading online examinations.
 
 ## Team
-- Tanish Jaladanki
-- Sumiran Vuppuluri
-- Sushanth B
-- Sudarshan D
+- **Sushanth B** (`@Sushanth-xy`) — Developer / System Architect / Repo Owner (26 Story Points)
+- **Tanish Jaladanki** (`@tan-git-06`) — QA Lead / Question Bank & Grading Engine (26 Story Points)
+- **Sumiran Vuppuluri** (`@sumirxn`) — Test Engineer / Auth, Security & Delivery (26 Story Points)
+- **Sudarshan D** (`@SudarshanD231`) — Product Owner / Frontend UI, Proctoring & Admin (26 Story Points)
+
+## Agile Sprint Management (No Jira — GitHub Native)
+All work is tracked via **GitHub Issues**, **Milestones**, and **Labels** with balanced Story Point allocation:
+- **[Sprint 1 Milestone](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/milestone/1)** (19th Oct – 23rd Oct): Core Working MVP (52 Story Points — 13 per member)
+- **[Sprint 2 Milestone](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/milestone/2)** (26th Oct – 30th Oct): Subjective Grading, Proctoring, Admin, Hardening (52 Story Points — 13 per member)
+- **Full Sprint Plan & Traceability Matrix:** See [SPRINT_PLAN.md](file:///Users/sushanth/Code/Online_Exam_Portal_SE/docs/SPRINT_PLAN.md)
+- **SRS & Test Plan:** Located in [docs/](file:///Users/sushanth/Code/Online_Exam_Portal_SE/docs)
 
 ## Tech Stack
 - **Backend:** Spring Boot (Java 17, Maven)
