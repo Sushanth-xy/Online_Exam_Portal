@@ -40,20 +40,20 @@ In accordance with the **SE Mini-Project Deliverables Part-2** guidelines:
 ### Goal:
 Deliver a working end-to-end exam delivery flow where students register/login, instructors author questions and schedule exams, students take exams with live countdown timer and 30s auto-save, exams auto-submit on timeout, and objective questions are immediately auto-graded.
 
-| Issue | Title | Assignee | Story Points | Module | Traceability (SRS / STP) |
-| :---: | :--- | :--- | :---: | :--- | :--- |
-| [#2](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/2) | CI/CD Automated Build & Test Pipeline | `@Sushanth-xy` | 3 | DevOps | `OEP-NF-003`, Deliverables 2b |
-| [#3](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/3) | User Registration, Authentication & JWT Security Backend | `@Sushanth-xy` | 5 | Auth | `OEP-F-001`, `OEP-F-002`, `OEP-SR-002` (`TC-Auth-01`, `TC-Auth-02`) |
-| [#4](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/4) | Exam Delivery Engine & Auto-Save Session Management Backend | `@Sushanth-xy` | 5 | Exam | `OEP-F-012`, `OEP-F-015` (`TC-Exam-02`, `TC-Exam-05`) |
-| [#5](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/5) | Question Bank Management API (MCQ, True/False, Short Answer) | `@tan-git-06` | 5 | Question Bank | `OEP-F-006` (`TC-QB-01`) |
-| [#6](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/6) | Exam Creation, Scheduling & Window Protection API | `@tan-git-06` | 5 | Exam / Security | `OEP-F-007`, `OEP-F-008`, `OEP-SR-003` (`TC-QB-02`, `TC-QB-03`, `TC-Sec-03`) |
-| [#7](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/7) | Instant Auto-Grading Engine for Objective Questions Backend | `@tan-git-06` | 3 | Grading | `OEP-F-016` (`TC-Grade-01`) |
-| [#8](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/8) | Auth Views: Registration, Login & Role-Based Route Guards Frontend | `@sumirxn` | 5 | Auth / Frontend | `OEP-F-001`, `OEP-F-002`, `OEP-F-003` (`TC-Auth-03`) |
-| [#9](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/9) | Timed Exam UI with Live Countdown Timer & Auto-Submit Frontend | `@sumirxn` | 5 | Exam / Frontend | `OEP-F-011`, `OEP-F-012`, `OEP-F-013` (`TC-Exam-01`, `TC-Exam-03`) |
-| [#10](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/10) | Sprint 1 Automated Test Suite & STP Phase 1 Verification | `@sumirxn` | 3 | QA / Testing | STP Phase 1 (`TC-Auth-01` to `TC-Grade-01`) |
-| [#11](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/11) | Instructor Dashboard: Question Bank Authoring & Exam Creator UI | `@SudarshanD231` | 5 | Instructor UI | `OEP-F-006`, `OEP-F-007`, `OEP-F-008`, `OEP-F-010` (`TC-QB-05`) |
-| [#12](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/12) | Student Dashboard: Available Exams & Scheduled Window Gate UI | `@SudarshanD231` | 5 | Student UI | `OEP-F-014` (`TC-Exam-04`) |
-| [#13](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/13) | Client-Side Proctoring: Fullscreen Enforcement & Tab-Switch Triggers | `@SudarshanD231` | 3 | Proctoring | `OEP-F-019`, `OEP-F-020` (`TC-Mon-01`, `TC-Mon-02`) |
+| Issue | Title | Assignee | Story Points | Module | Traceability (SRS / STP) | Status |
+| :---: | :--- | :--- | :---: | :--- | :--- | :---: |
+| [#2](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/2) | CI/CD Automated Build & Test Pipeline | `@Sushanth-xy` | 3 | DevOps | `OEP-NF-003`, Deliverables 2b | **DONE** |
+| [#3](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/3) | User Registration, Authentication & JWT Security Backend | `@Sushanth-xy` | 5 | Auth | `OEP-F-001`, `OEP-F-002`, `OEP-SR-002` (`TC-Auth-01`, `TC-Auth-02`) | **DONE** |
+| [#4](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/4) | Exam Delivery Engine & Auto-Save Session Management Backend | `@Sushanth-xy` | 5 | Exam | `OEP-F-012`, `OEP-F-015` (`TC-Exam-02`, `TC-Exam-05`) | To Do |
+| [#5](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/5) | Question Bank Management API (MCQ, True/False, Short Answer) | `@tan-git-06` | 5 | Question Bank | `OEP-F-006` (`TC-QB-01`) | To Do |
+| [#6](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/6) | Exam Creation, Scheduling & Window Protection API | `@tan-git-06` | 5 | Exam / Security | `OEP-F-007`, `OEP-F-008`, `OEP-SR-003` (`TC-QB-02`, `TC-QB-03`, `TC-Sec-03`) | To Do |
+| [#7](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/7) | Instant Auto-Grading Engine for Objective Questions Backend | `@tan-git-06` | 3 | Grading | `OEP-F-016` (`TC-Grade-01`) | To Do |
+| [#8](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/8) | Auth Views: Registration, Login & Role-Based Route Guards Frontend | `@sumirxn` | 5 | Auth / Frontend | `OEP-F-001`, `OEP-F-002`, `OEP-F-003` (`TC-Auth-03`) | To Do |
+| [#9](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/9) | Timed Exam UI with Live Countdown Timer & Auto-Submit Frontend | `@sumirxn` | 5 | Exam / Frontend | `OEP-F-011`, `OEP-F-012`, `OEP-F-013` (`TC-Exam-01`, `TC-Exam-03`) | To Do |
+| [#10](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/10) | Sprint 1 Automated Test Suite & STP Phase 1 Verification | `@sumirxn` | 3 | QA / Testing | STP Phase 1 (`TC-Auth-01` to `TC-Grade-01`) | To Do |
+| [#11](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/11) | Instructor Dashboard: Question Bank Authoring & Exam Creator UI | `@SudarshanD231` | 5 | Instructor UI | `OEP-F-006`, `OEP-F-007`, `OEP-F-008`, `OEP-F-010` (`TC-QB-05`) | To Do |
+| [#12](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/12) | Student Dashboard: Available Exams & Scheduled Window Gate UI | `@SudarshanD231` | 5 | Student UI | `OEP-F-014` (`TC-Exam-04`) | To Do |
+| [#13](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/13) | Client-Side Proctoring: Fullscreen Enforcement & Tab-Switch Triggers | `@SudarshanD231` | 3 | Proctoring | `OEP-F-019`, `OEP-F-020` (`TC-Mon-01`, `TC-Mon-02`) | To Do |
 
 ---
 
