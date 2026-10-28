@@ -3,10 +3,10 @@
 A comprehensive and secure web portal for conducting, proctoring, and grading online examinations.
 
 ## Team
-- **Sushanth B** (`@Sushanth-xy`) — Developer / System Architect / Repo Owner (26 Story Points)
-- **Tanish Jaladanki** (`@tan-git-06`) — QA Lead / Question Bank & Grading Engine (26 Story Points)
-- **Sumiran Vuppuluri** (`@sumirxn`) — Test Engineer / Auth, Security & Delivery (26 Story Points)
-- **Sudarshan D** (`@SudarshanD231`) — Product Owner / Frontend UI, Proctoring & Admin (26 Story Points)
+- **Sushanth B** (`@Sushanth-xy`) — **Developer** / Repo Owner (26 Story Points)
+- **Sudarshan D** (`@SudarshanD231`) — **Product Owner** (26 Story Points)
+- **Tanish Jaladanki** (`@tan-git-06`) — **QA Lead** (26 Story Points)
+- **Sumiran Vuppuluri** (`@sumirxn`) — **Test Engineer** (26 Story Points)
 
 ## Agile Sprint Management (No Jira — GitHub Native)
 All work is tracked via **GitHub Issues**, **Milestones**, and **Labels** with balanced Story Point allocation:
