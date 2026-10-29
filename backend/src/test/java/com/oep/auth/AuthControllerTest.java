@@ -21,13 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource(properties = {
-    "spring.datasource.url=jdbc:postgresql://localhost:5432/oep",
-    "spring.datasource.username=oep",
-    "spring.datasource.password=oep",
-    "spring.datasource.driver-class-name=org.postgresql.Driver",
-    "spring.jpa.hibernate.ddl-auto=update"
-})
 public class AuthControllerTest {
 
     @Autowired
