@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -20,6 +21,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestPropertySource(properties = {
+    "spring.datasource.url=jdbc:postgresql://localhost:5432/oep",
+    "spring.datasource.username=oep",
+    "spring.datasource.password=oep",
+    "spring.datasource.driver-class-name=org.postgresql.Driver",
+    "spring.jpa.hibernate.ddl-auto=update"
+})
 public class AuthControllerTest {
 
     @Autowired
@@ -162,5 +170,27 @@ public class AuthControllerTest {
         // Access without token should be unauthorized
         mockMvc.perform(get("/api/v1/auth/me"))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("TC-Auth-03: RBAC middleware blocks STUDENT from accessing Instructor or Admin endpoints")
+    void testRbacStudentAccessBlocked() throws Exception {
+        RegisterRequest studentReg = new RegisterRequest(
+                "Student User",
+                "student.rbac@example.com",
+                "Password@123",
+                Role.STUDENT
+        );
+        MvcResult regResult = mockMvc.perform(post("/api/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(studentReg)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        String token = objectMapper.readTree(regResult.getResponse().getContentAsString()).get("token").asText();
+
+        mockMvc.perform(get("/api/v1/admin/dashboard")
+                        .header("Authorization", "Bearer " + token))
+                .andExpect(status().isForbidden());
     }
 }
