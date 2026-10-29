@@ -138,10 +138,12 @@ public class ExamDeliveryTest {
                 Collections.singletonList(q1)
         ));
 
-        // Deliberate mistake: developer mistakenly expects 200 OK instead of 400 Bad Request
+        // Attempting to start before start window returns 400 Bad Request
         mockMvc.perform(post("/api/v1/exams/" + futureExam.getId() + "/start")
                         .header("Authorization", "Bearer " + studentToken))
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Invalid State"))
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Exam has not started yet")));
     }
 
     @Test
