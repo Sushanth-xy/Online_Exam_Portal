@@ -162,30 +162,56 @@ public class ExamDeliveryTest {
     }
 
     @Test
-    @DisplayName("TC-Exam-02: Auto-save answers every 30 seconds and restore upon reload")
+    @DisplayName("TC-Exam-02: Persist periodic auto-saves and restore all answers upon reload")
     void testAutosaveAndRestoreProgress() throws Exception {
         // 1. Start exam
         mockMvc.perform(post("/api/v1/exams/" + activeExam.getId() + "/start")
                         .header("Authorization", "Bearer " + studentToken))
                 .andExpect(status().isOk());
 
-        // 2. Autosave answer for q1
-        AutosaveRequest autosave = new AutosaveRequest(Collections.singletonList(
+        // 2. Simulate separate periodic autosaves without waiting for the interval
+        AutosaveRequest firstAutosave = new AutosaveRequest(Collections.singletonList(
                 new AutosaveAnswerItem(q1.getId(), "Paris")
         ));
 
         mockMvc.perform(post("/api/v1/exams/" + activeExam.getId() + "/autosave")
                         .header("Authorization", "Bearer " + studentToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(autosave)))
+                        .content(objectMapper.writeValueAsString(firstAutosave)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("SAVED"));
 
-        // 3. Mid-exam browser refresh: fetch attempt and verify saved answer restored
+        AutosaveRequest secondAutosave = new AutosaveRequest(Collections.singletonList(
+                new AutosaveAnswerItem(q2.getId(), "True")
+        ));
+
+        mockMvc.perform(post("/api/v1/exams/" + activeExam.getId() + "/autosave")
+                        .header("Authorization", "Bearer " + studentToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(secondAutosave)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("SAVED"));
+
+        // 3. Verify both responses were persisted
+        ExamAttempt persistedAttempt = examAttemptRepository
+                .findByExamIdAndStudentEmail(activeExam.getId(), "student@test.com")
+                .orElseThrow();
+        assertThat(persistedAttempt.getAnswers()).hasSize(2);
+        assertThat(persistedAttempt.getAnswers()).anySatisfy(answer -> {
+            assertThat(answer.getQuestionId()).isEqualTo(q1.getId());
+            assertThat(answer.getSelectedOption()).isEqualTo("Paris");
+        });
+        assertThat(persistedAttempt.getAnswers()).anySatisfy(answer -> {
+            assertThat(answer.getQuestionId()).isEqualTo(q2.getId());
+            assertThat(answer.getSelectedOption()).isEqualTo("True");
+        });
+
+        // 4. Mid-exam browser refresh: fetch attempt and verify all saved answers restored
         mockMvc.perform(get("/api/v1/exams/" + activeExam.getId() + "/attempt")
                         .header("Authorization", "Bearer " + studentToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.savedAnswers." + q1.getId()).value("Paris"));
+                .andExpect(jsonPath("$.savedAnswers." + q1.getId()).value("Paris"))
+                .andExpect(jsonPath("$.savedAnswers." + q2.getId()).value("True"));
     }
 
     @Test
