@@ -122,15 +122,16 @@ public class ExamDeliveryTest {
     }
 
     @Test
-    @DisplayName("TC-Exam-04: Prevent starting an exam outside scheduled window")
+    @DisplayName("TC-Exam-04: Reject starting an exam before or after its scheduled window")
     void testExamScheduleWindowGate() throws Exception {
-        // Create an upcoming exam starting tomorrow
+        LocalDateTime now = LocalDateTime.now();
+
         Exam futureExam = examRepository.save(new Exam(
                 "Future Exam",
                 "Not yet open",
                 30,
-                LocalDateTime.now().plusDays(1),
-                LocalDateTime.now().plusDays(2),
+                now.plusDays(1),
+                now.plusDays(2),
                 50.0,
                 0.0,
                 false,
@@ -144,6 +145,26 @@ public class ExamDeliveryTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").value("Invalid State"))
                 .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Exam has not started yet")));
+
+        Exam expiredExam = examRepository.save(new Exam(
+                "Expired Exam",
+                "Window has closed",
+                30,
+                now.minusDays(2),
+                now.minusDays(1),
+                50.0,
+                0.0,
+                false,
+                "instructor@test.com",
+                Collections.singletonList(q1)
+        ));
+
+        // Attempting to start after the end window also returns 400 Bad Request
+        mockMvc.perform(post("/api/v1/exams/" + expiredExam.getId() + "/start")
+                        .header("Authorization", "Bearer " + studentToken))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("Invalid State"))
+                .andExpect(jsonPath("$.message").value(org.hamcrest.Matchers.containsString("Exam window has closed")));
     }
 
     @Test
@@ -158,7 +179,9 @@ public class ExamDeliveryTest {
                 .andExpect(jsonPath("$.questions").isArray())
                 .andExpect(jsonPath("$.questions[0].prompt").isNotEmpty())
                 .andExpect(jsonPath("$.questions[0].correctAnswer").doesNotExist())
-                .andExpect(jsonPath("$.questions[0].explanation").doesNotExist());
+                .andExpect(jsonPath("$.questions[0].explanation").doesNotExist())
+                .andExpect(jsonPath("$.questions[1].correctAnswer").doesNotExist())
+                .andExpect(jsonPath("$.questions[1].explanation").doesNotExist());
     }
 
     @Test
