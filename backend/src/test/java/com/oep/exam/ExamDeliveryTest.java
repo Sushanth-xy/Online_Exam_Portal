@@ -215,6 +215,47 @@ public class ExamDeliveryTest {
     }
 
     @Test
+    @DisplayName("TC-Exam-03: Submit the latest answer after it is modified")
+    void testModifiedAnswerIsSubmitted() throws Exception {
+        mockMvc.perform(post("/api/v1/exams/" + activeExam.getId() + "/start")
+                        .header("Authorization", "Bearer " + studentToken))
+                .andExpect(status().isOk());
+
+        AutosaveRequest initialAnswer = new AutosaveRequest(Collections.singletonList(
+                new AutosaveAnswerItem(q1.getId(), "London")
+        ));
+        mockMvc.perform(post("/api/v1/exams/" + activeExam.getId() + "/autosave")
+                        .header("Authorization", "Bearer " + studentToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(initialAnswer)))
+                .andExpect(status().isOk());
+
+        AutosaveRequest modifiedAnswer = new AutosaveRequest(Collections.singletonList(
+                new AutosaveAnswerItem(q1.getId(), "Paris")
+        ));
+        mockMvc.perform(post("/api/v1/exams/" + activeExam.getId() + "/autosave")
+                        .header("Authorization", "Bearer " + studentToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(modifiedAnswer)))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(post("/api/v1/exams/" + activeExam.getId() + "/submit")
+                        .header("Authorization", "Bearer " + studentToken))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.status").value("COMPLETED"))
+                .andExpect(jsonPath("$.totalScore").value(4.0))
+                .andExpect(jsonPath("$.answers.length()").value(1))
+                .andExpect(jsonPath("$.answers[0].questionId").value(q1.getId()))
+                .andExpect(jsonPath("$.answers[0].selectedOption").value("Paris"));
+
+        ExamAttempt submittedAttempt = examAttemptRepository
+                .findByExamIdAndStudentEmail(activeExam.getId(), "student@test.com")
+                .orElseThrow();
+        assertThat(submittedAttempt.getAnswers()).hasSize(1);
+        assertThat(submittedAttempt.getAnswers().get(0).getSelectedOption()).isEqualTo("Paris");
+    }
+
+    @Test
     @DisplayName("TC-Exam-05 & TC-Grade-01: Submit exam marks status COMPLETED and performs instant auto-grading")
     void testSubmitExamAndInstantAutoGrading() throws Exception {
         // 1. Start exam
