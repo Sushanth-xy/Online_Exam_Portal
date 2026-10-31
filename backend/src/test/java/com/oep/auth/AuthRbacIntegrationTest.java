@@ -1,3 +1,4 @@
+
 package com.oep.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,10 +61,12 @@ class AuthRbacIntegrationTest {
 
     // ------------------------------------------------------------------ helpers
 
-    private ResultActions register(String name, String email, String password, Role role) throws Exception {
+    private ResultActions register(String name, String email, String password, Role requestedRole) throws Exception {
+        // Public registration always creates STUDENT accounts.
+        // requestedRole is intentionally ignored.
         return mockMvc.perform(post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(new RegisterRequest(name, email, password, role))));
+                .content(objectMapper.writeValueAsString(new RegisterRequest(name, email, password))));
     }
 
     private ResultActions login(String email, String password) throws Exception {
@@ -76,7 +79,7 @@ class AuthRbacIntegrationTest {
         return objectMapper.readTree(result.getResponse().getContentAsString()).get("token").asText();
     }
 
-    /** Inserts a user directly (so RBAC tests don't depend on how /register treats the role field) and logs in. */
+    /** Inserts a user directly so RBAC tests can test each role independently of public registration. */
     private String seedUserAndLogin(Role role) throws Exception {
         String email = role.name().toLowerCase() + "@oep-test.com";
         userRepository.save(new User("Seeded " + role, email, passwordEncoder.encode(PASSWORD), role));
@@ -87,7 +90,7 @@ class AuthRbacIntegrationTest {
         return mockMvc.perform(get(url).header("Authorization", "Bearer " + token));
     }
 
-    /** Spring Security's default for anonymous callers can be 401 or 403 depending on config; both mean "blocked". */
+    /** Spring Security's default for anonymous callers can be 401 or 403 depending on config; both mean blocked. */
     private void assertBlocked(ResultActions actions) throws Exception {
         int code = actions.andReturn().getResponse().getStatus();
         assertThat(code).as("expected request to be blocked (401/403) but got %s", code).isIn(401, 403);
@@ -116,6 +119,20 @@ class AuthRbacIntegrationTest {
                         .content("{\"name\":\"No Role\",\"email\":\"norole@oep-test.com\",\"password\":\"" + PASSWORD + "\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.role").value("STUDENT"));
+    }
+
+    @Test
+    @DisplayName("TC-Auth-01: registration cannot assign ADMIN or INSTRUCTOR role")
+    void registerCannotAssignPrivilegedRole() throws Exception {
+        mockMvc.perform(post("/api/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Attacker\",\"email\":\"attacker@oep-test.com\",\"password\":\""
+                                + PASSWORD + "\",\"role\":\"ADMIN\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.role").value("STUDENT"));
+
+        assertThat(userRepository.findByEmail("attacker@oep-test.com").orElseThrow().getRole())
+                .isEqualTo(Role.STUDENT);
     }
 
     @Test
@@ -282,17 +299,14 @@ class AuthRbacIntegrationTest {
     @Test
     @DisplayName("TC-Auth-03: garbage, tampered, forged-role and expired tokens are all rejected")
     void invalidTokensAreRejected() throws Exception {
-        // garbage
         assertBlocked(getWithToken(STUDENT_PROBE, "not.a.jwt"));
 
-        // tampered signature (flip first signature char - last char can hide padding bits)
         String valid = seedUserAndLogin(Role.STUDENT);
         String[] parts = valid.split("\\.");
         char first = parts[2].charAt(0);
         String tampered = parts[0] + "." + parts[1] + "." + (first == 'A' ? 'B' : 'A') + parts[2].substring(1);
         assertBlocked(getWithToken(STUDENT_PROBE, tampered));
 
-        // forged token claiming ADMIN, signed with a different key
         SecretKey wrongKey = Keys.hmacShaKeyFor(
                 "a-completely-different-secret-key-for-forgery-0123456789".getBytes(StandardCharsets.UTF_8));
         String forged = Jwts.builder()
@@ -301,7 +315,6 @@ class AuthRbacIntegrationTest {
                 .signWith(wrongKey).compact();
         assertBlocked(getWithToken(ADMIN_PROBE, forged));
 
-        // correctly signed but already expired
         SecretKey realKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
         String expired = Jwts.builder()
                 .subject("student@oep-test.com").claim("role", "STUDENT")

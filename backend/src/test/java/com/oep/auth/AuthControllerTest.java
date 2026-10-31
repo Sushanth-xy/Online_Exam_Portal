@@ -1,3 +1,4 @@
+
 package com.oep.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -38,13 +38,12 @@ public class AuthControllerTest {
     }
 
     @Test
-    @DisplayName("TC-Auth-01: Valid student registration creates account and issues JWT token")
+    @DisplayName("TC-Auth-01: Valid registration creates a student account and issues JWT")
     void testRegisterSuccess() throws Exception {
         RegisterRequest request = new RegisterRequest(
                 "Sushanth B",
                 "sushanth@example.com",
-                "Password@123",
-                Role.STUDENT
+                "Password@123"
         );
 
         mockMvc.perform(post("/api/v1/auth/register")
@@ -56,10 +55,32 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.email").value("sushanth@example.com"))
                 .andExpect(jsonPath("$.role").value("STUDENT"));
 
-        // Verify password is encrypted in database (never stored in plaintext - OEP-SR-002)
         User savedUser = userRepository.findByEmail("sushanth@example.com").orElseThrow();
         assertThat(savedUser.getPassword()).isNotEqualTo("Password@123");
         assertThat(savedUser.getPassword()).startsWith("$2a$");
+        assertThat(savedUser.getRole()).isEqualTo(Role.STUDENT);
+    }
+
+    @Test
+    @DisplayName("Public registration cannot assign an instructor or admin role")
+    void testRegistrationCannotAssignPrivilegedRole() throws Exception {
+        String request = """
+                {
+                    "name": "Malicious User",
+                    "email": "malicious@example.com",
+                    "password": "Password@123",
+                    "role": "ADMIN"
+                }
+                """;
+
+        mockMvc.perform(post("/api/v1/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.role").value("STUDENT"));
+
+        User savedUser = userRepository.findByEmail("malicious@example.com").orElseThrow();
+        assertThat(savedUser.getRole()).isEqualTo(Role.STUDENT);
     }
 
     @Test
@@ -68,17 +89,14 @@ public class AuthControllerTest {
         RegisterRequest request = new RegisterRequest(
                 "Alice",
                 "alice@example.com",
-                "Secret@123",
-                Role.STUDENT
+                "Secret@123"
         );
 
-        // First registration
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated());
 
-        // Duplicate registration attempt
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
@@ -92,8 +110,7 @@ public class AuthControllerTest {
         RegisterRequest invalidRequest = new RegisterRequest(
                 "",
                 "invalid-email",
-                "123", // too short
-                Role.STUDENT
+                "123"
         );
 
         mockMvc.perform(post("/api/v1/auth/register")
@@ -106,32 +123,44 @@ public class AuthControllerTest {
     @Test
     @DisplayName("TC-Auth-02: Valid credentials authenticate user and return JWT bearer token")
     void testLoginSuccess() throws Exception {
-        RegisterRequest reg = new RegisterRequest("Bob", "bob@example.com", "SecretPass123", Role.INSTRUCTOR);
+        RegisterRequest reg = new RegisterRequest(
+                "Bob",
+                "bob@example.com",
+                "SecretPass123"
+        );
+
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reg)))
                 .andExpect(status().isCreated());
 
         LoginRequest login = new LoginRequest("bob@example.com", "SecretPass123");
+
         mockMvc.perform(post("/api/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(login)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.token").isNotEmpty())
                 .andExpect(jsonPath("$.email").value("bob@example.com"))
-                .andExpect(jsonPath("$.role").value("INSTRUCTOR"));
+                .andExpect(jsonPath("$.role").value("STUDENT"));
     }
 
     @Test
     @DisplayName("TC-Auth-02: Incorrect password is rejected with 401 Unauthorized")
     void testLoginIncorrectPassword() throws Exception {
-        RegisterRequest reg = new RegisterRequest("Carol", "carol@example.com", "CorrectPass1", Role.STUDENT);
+        RegisterRequest reg = new RegisterRequest(
+                "Carol",
+                "carol@example.com",
+                "CorrectPass1"
+        );
+
         mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reg)))
                 .andExpect(status().isCreated());
 
         LoginRequest wrongLogin = new LoginRequest("carol@example.com", "WrongPassword");
+
         mockMvc.perform(post("/api/v1/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(wrongLogin)))
@@ -142,7 +171,12 @@ public class AuthControllerTest {
     @Test
     @DisplayName("Authenticated endpoint /api/v1/auth/me returns profile with valid JWT")
     void testGetCurrentUserProfile() throws Exception {
-        RegisterRequest reg = new RegisterRequest("Dave", "dave@example.com", "SecureDave123", Role.ADMIN);
+        RegisterRequest reg = new RegisterRequest(
+                "Dave",
+                "dave@example.com",
+                "SecureDave123"
+        );
+
         MvcResult regResult = mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(reg)))
@@ -152,35 +186,34 @@ public class AuthControllerTest {
         String responseBody = regResult.getResponse().getContentAsString();
         String token = objectMapper.readTree(responseBody).get("token").asText();
 
-        // Access /api/v1/auth/me with Bearer token
         mockMvc.perform(get("/api/v1/auth/me")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Dave"))
                 .andExpect(jsonPath("$.email").value("dave@example.com"))
-                .andExpect(jsonPath("$.role").value("ADMIN"));
+                .andExpect(jsonPath("$.role").value("STUDENT"));
 
-        // Access without token should be unauthorized
         mockMvc.perform(get("/api/v1/auth/me"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    @DisplayName("TC-Auth-03: RBAC middleware blocks STUDENT from accessing Instructor or Admin endpoints")
+    @DisplayName("TC-Auth-03: RBAC middleware blocks STUDENT from Instructor or Admin endpoints")
     void testRbacStudentAccessBlocked() throws Exception {
         RegisterRequest studentReg = new RegisterRequest(
                 "Student User",
                 "student.rbac@example.com",
-                "Password@123",
-                Role.STUDENT
+                "Password@123"
         );
+
         MvcResult regResult = mockMvc.perform(post("/api/v1/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(studentReg)))
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        String token = objectMapper.readTree(regResult.getResponse().getContentAsString()).get("token").asText();
+        String token = objectMapper.readTree(regResult.getResponse().getContentAsString())
+                .get("token").asText();
 
         mockMvc.perform(get("/api/v1/admin/dashboard")
                         .header("Authorization", "Bearer " + token))
