@@ -29,7 +29,7 @@ public class AuthService {
             throw new IllegalArgumentException("Email already in use: " + request.getEmail());
         }
 
-        Role assignedRole = request.getRole() != null ? request.getRole() : Role.STUDENT;
+        Role assignedRole = Role.STUDENT;
 
         User user = new User(
                 request.getName().trim(),
