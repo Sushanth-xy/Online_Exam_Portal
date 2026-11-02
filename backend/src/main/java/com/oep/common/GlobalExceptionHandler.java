@@ -3,6 +3,7 @@ package com.oep.common;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -23,6 +24,16 @@ public class GlobalExceptionHandler {
         body.put("error", "Unauthorized");
         body.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(body);
+    }
+
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity<Map<String, Object>> handleLockedException(LockedException ex) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("status", HttpStatus.LOCKED.value());
+        body.put("error", "Locked");
+        body.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.LOCKED).body(body);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

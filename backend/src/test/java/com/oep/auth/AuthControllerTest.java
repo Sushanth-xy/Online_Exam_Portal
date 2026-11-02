@@ -30,10 +30,14 @@ public class AuthControllerTest {
     private UserRepository userRepository;
 
     @Autowired
+    private PasswordResetTokenRepository passwordResetTokenRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
+        passwordResetTokenRepository.deleteAll();
         userRepository.deleteAll();
     }
 
