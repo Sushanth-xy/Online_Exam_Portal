@@ -9,14 +9,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -44,6 +50,12 @@ public class SecurityLockoutTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtService jwtService;
+
+    @Value("${app.jwt.secret}")
+    private String jwtSecret;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -350,5 +362,23 @@ public class SecurityLockoutTest {
                 .andExpect(status().isOk())
                 .andExpect(header().string("X-Content-Type-Options", "nosniff"))
                 .andExpect(header().string("X-Frame-Options", "DENY"));
+    }
+
+    // =========================================================================
+    // TC-Sec-05 / OEP-SR-005: Inactivity / Token Expiry Verification
+    // =========================================================================
+
+    @Test
+    @DisplayName("TC-Sec-05: Expired JWT tokens are rejected as invalid")
+    void testExpiredJwtTokensRejected() {
+        SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        String expiredToken = Jwts.builder()
+                .subject("expireduser@example.com")
+                .issuedAt(new Date(System.currentTimeMillis() - 7200_000))
+                .expiration(new Date(System.currentTimeMillis() - 3600_000))
+                .signWith(key)
+                .compact();
+
+        assertThat(jwtService.isTokenValid(expiredToken, "expireduser@example.com")).isFalse();
     }
 }
