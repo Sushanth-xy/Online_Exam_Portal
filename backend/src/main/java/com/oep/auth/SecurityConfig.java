@@ -105,6 +105,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/v1/instructor/**").hasAnyRole("INSTRUCTOR", "ADMIN")
+                        .requestMatchers("/api/v1/grading/**").hasAnyRole("INSTRUCTOR", "ADMIN")
                         .requestMatchers("/api/v1/student/**").hasRole("STUDENT")
                         .anyRequest().authenticated()
                 )
