@@ -35,6 +35,9 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<PasswordResetToken> passwordResetTokens = new java.util.ArrayList<>();
+
     public User() {
     }
 
@@ -115,5 +118,29 @@ public class User {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public java.util.List<PasswordResetToken> getPasswordResetTokens() {
+        return passwordResetTokens;
+    }
+
+    public void setPasswordResetTokens(java.util.List<PasswordResetToken> passwordResetTokens) {
+        this.passwordResetTokens = passwordResetTokens;
+    }
+
+    public boolean isAccountLocked() {
+        return lockedUntil != null && lockedUntil.isAfter(LocalDateTime.now());
+    }
+
+    public void recordFailedLogin() {
+        this.failedLoginAttempts++;
+        if (this.failedLoginAttempts >= 5) {
+            this.lockedUntil = LocalDateTime.now().plusMinutes(15);
+        }
+    }
+
+    public void resetLockout() {
+        this.failedLoginAttempts = 0;
+        this.lockedUntil = null;
     }
 }

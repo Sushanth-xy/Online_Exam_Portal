@@ -50,12 +50,14 @@ class AuthRbacIntegrationTest {
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
     @Autowired private UserRepository userRepository;
+    @Autowired private PasswordResetTokenRepository passwordResetTokenRepository;
     @Autowired private PasswordEncoder passwordEncoder;
     @Autowired private JwtService jwtService;
     @Value("${app.jwt.secret}") private String jwtSecret;
 
     @BeforeEach
     void cleanDatabase() {
+        passwordResetTokenRepository.deleteAll();
         userRepository.deleteAll();
     }
 
