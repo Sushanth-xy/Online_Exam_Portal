@@ -47,7 +47,7 @@ Deliver a working end-to-end exam delivery flow where students register/login, i
 | **1.9** | [#12](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/12) | `[Step 1.9]` [QA / Test] Automated Test Cases for Exam Window Gating & Boundary Edge Conditions (TC-Exam-04, TC-Exam-05) | `@sumirxn` | 5 | Test Engineer | Testing / Exam |  **DONE** |
 | **1.10** | [#7](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/7) | `[Step 1.10]` [QA / Test] Sprint 1 Test Execution Logs & Defect Reports Generation | `@sumirxn` | 3 | Test Engineer | Testing / Logs |  **DONE** |
 | **1.11** | [#10](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/10) | `[Step 1.11]` [QA / Test] Sprint 1 Quality Gate, Defect Triage & RTM Status Matrix (Phase 1 Baseline) | `@tan-git-06` | 3 | QA Lead | QA / RTM |  **DONE** |
-| **1.12** | [#13](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/13) | `[Step 1.12]` [Product & Delivery] Sprint 1 Demo Video (1 min), Acceptance Sign-off & README Updates | `@SudarshanD231` | 3 | Product Owner | Delivery / PO | To Do |
+| **1.12** | [#13](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/13) | `[Step 1.12]` [Product & Delivery] Sprint 1 Demo Video (1 min), Acceptance Sign-off & README Updates | `@SudarshanD231` | 3 | Product Owner | Delivery / PO | **DONE** |
 
 ---
 
@@ -58,7 +58,7 @@ Deliver instructor subjective grading workflows, result publication controls, pr
 
 | Step | Issue | Title | Assignee | Pts | Role | Module | Status |
 | :---: | :---: | :--- | :--- | :---: | :--- | :--- | :---: |
-| **2.1** | [#14](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/14) | `[Step 2.1]` [Backend] Subjective Question Manual Grading & Feedback API | `@Sushanth-xy` | 5 | Developer | Grading | To Do |
+| **2.1** | [#14](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/14) | `[Step 2.1]` [Backend] Subjective Question Manual Grading & Feedback API | `@Sushanth-xy` | 5 | Developer | Grading | **DONE** |
 | **2.2** | [#15](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/15) | `[Step 2.2]` [Backend] Security Hardening: Account Lockout (5 attempts) & Password Reset | `@Sushanth-xy` | 5 | Developer | Security | To Do |
 | **2.3** | [#16](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/16) | `[Step 2.3]` [Backend] System Audit Trail Logging Interceptor & 3-Year Retention Compliance | `@Sushanth-xy` | 3 | Developer | Admin / Ops | To Do |
 | **2.4** | [#20](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/20) | `[Step 2.4]` [Frontend] Student Exam Portal: Live Countdown Timer, Question Palette & Autosave Sync | `@SudarshanD231` | 5 | Product Owner | Student UI | To Do |
