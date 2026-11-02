@@ -59,7 +59,7 @@ Deliver instructor subjective grading workflows, result publication controls, pr
 | Step | Issue | Title | Assignee | Pts | Role | Module | Status |
 | :---: | :---: | :--- | :--- | :---: | :--- | :--- | :---: |
 | **2.1** | [#14](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/14) | `[Step 2.1]` [Backend] Subjective Question Manual Grading & Feedback API | `@Sushanth-xy` | 5 | Developer | Grading | **DONE** |
-| **2.2** | [#15](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/15) | `[Step 2.2]` [Backend] Security Hardening: Account Lockout (5 attempts) & Password Reset | `@Sushanth-xy` | 5 | Developer | Security | To Do |
+| **2.2** | [#15](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/15) | `[Step 2.2]` [Backend] Security Hardening: Account Lockout (5 attempts) & Password Reset | `@Sushanth-xy` | 5 | Developer | Security | **DONE** |
 | **2.3** | [#16](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/16) | `[Step 2.3]` [Backend] System Audit Trail Logging Interceptor & 3-Year Retention Compliance | `@Sushanth-xy` | 3 | Developer | Admin / Ops | To Do |
 | **2.4** | [#20](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/20) | `[Step 2.4]` [Frontend] Student Exam Portal: Live Countdown Timer, Question Palette & Autosave Sync | `@SudarshanD231` | 5 | Product Owner | Student UI | To Do |
 | **2.5** | [#24](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/issues/24) | `[Step 2.5]` [Frontend] Proctoring Violation Alerts & Admin User Lifecycle Management Dashboard | `@SudarshanD231` | 5 | Product Owner | Admin UI | To Do |
