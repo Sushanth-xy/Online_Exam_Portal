@@ -12,6 +12,7 @@ import { InstructorDashboard } from './pages/InstructorDashboard';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { QuestionCreator } from './pages/QuestionCreator';
 import { ExamCreator } from './pages/ExamCreator';
+import { ExamTaking } from './pages/ExamTaking';
 
 import './App.css';
 
@@ -50,6 +51,11 @@ function AppRoutes() {
         <Route
           path="/student/dashboard"
           element={<StudentDashboard />}
+        />
+
+        <Route
+          path="/student/exams/:examId"
+          element={<ExamTaking />}
         />
       </Route>
 
