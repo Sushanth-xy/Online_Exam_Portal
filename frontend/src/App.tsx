@@ -8,8 +8,9 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { StudentDashboard } from './pages/StudentDashboard';
+import { StudentExam } from './pages/StudentExam';
 import { InstructorDashboard } from './pages/InstructorDashboard';
-import { AdminDashboard } from './pages/AdminDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 import { QuestionCreator } from './pages/QuestionCreator';
 import { ExamCreator } from './pages/ExamCreator';
 import { ExamTaking } from './pages/ExamTaking';
@@ -55,6 +56,11 @@ function AppRoutes() {
 
         <Route
           path="/student/exams/:examId"
+          element={<StudentExam />}
+        />
+
+        <Route
+          path="/student/exams/:examId/taking"
           element={<ExamTaking />}
         />
       </Route>
