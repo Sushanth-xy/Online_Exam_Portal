@@ -1,6 +1,40 @@
+import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
+import {
+  getInstructorProctoringIncidents,
+  type ProctoringIncident,
+} from '../api/proctoring';
 
 export function InstructorDashboard() {
+  const { token } = useAuth();
+  const [incidents, setIncidents] = useState<ProctoringIncident[]>([]);
+  const [incidentsLoading, setIncidentsLoading] = useState(false);
+  const [incidentError, setIncidentError] = useState('');
+
+  const loadIncidents = useCallback(async () => {
+    if (!token) return;
+
+    setIncidentsLoading(true);
+    setIncidentError('');
+
+    try {
+      setIncidents(await getInstructorProctoringIncidents(token));
+    } catch (error) {
+      setIncidentError(
+        error instanceof Error
+          ? error.message
+          : 'Unable to load proctoring incidents.',
+      );
+    } finally {
+      setIncidentsLoading(false);
+    }
+  }, [token]);
+
+  useEffect(() => {
+    void loadIncidents();
+  }, [loadIncidents]);
+
   return (
     <main style={styles.page}>
       <div style={styles.container}>
@@ -51,6 +85,60 @@ export function InstructorDashboard() {
           </Link>
         </section>
 
+        <section style={styles.monitoring}>
+          <div style={styles.monitoringHeading}>
+            <div>
+              <h2 style={styles.monitoringTitle}>Proctoring Incidents</h2>
+              <p style={styles.subtitle}>
+                Review incidents from attempts for your exams.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => void loadIncidents()}
+              disabled={incidentsLoading}
+            >
+              {incidentsLoading ? 'Refreshing...' : 'Refresh incidents'}
+            </button>
+          </div>
+
+          {incidentError && <p role="alert">{incidentError}</p>}
+          {incidentsLoading && incidents.length === 0 ? (
+            <p>Loading incidents...</p>
+          ) : incidents.length === 0 ? (
+            <p>No proctoring incidents have been recorded.</p>
+          ) : (
+            <div style={styles.tableWrapper}>
+              <table style={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Candidate</th>
+                    <th>Exam</th>
+                    <th>Attempt ID</th>
+                    <th>Incident</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {incidents.map((incident) => (
+                    <tr key={incident.id}>
+                      <td>{new Date(incident.occurredAt).toLocaleString()}</td>
+                      <td>{incident.studentEmail}</td>
+                      <td>{incident.examTitle}</td>
+                      <td>{incident.attemptId}</td>
+                      <td>
+                        {incident.type === 'TAB_SWITCH'
+                          ? 'Tab Switch'
+                          : 'Fullscreen Exit'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
+
         <footer style={styles.footer}>
           <Link to="/" style={styles.backLink}>
             ← Back to Home
@@ -95,6 +183,38 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
     gap: '24px',
+  },
+
+  monitoring: {
+    marginTop: '36px',
+    padding: '24px',
+    background: '#fff',
+    border: '1px solid #e6eaf2',
+    borderRadius: '16px',
+  },
+
+  monitoringHeading: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: '16px',
+    marginBottom: '16px',
+  },
+
+  monitoringTitle: {
+    margin: 0,
+    color: '#172033',
+    fontSize: '21px',
+  },
+
+  tableWrapper: {
+    overflowX: 'auto',
+  },
+
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse',
+    textAlign: 'left',
   },
 
   card: {

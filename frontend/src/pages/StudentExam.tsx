@@ -38,7 +38,7 @@ export function StudentExam() {
 
   const answersRef = useRef<Record<string, string>>({});
   const attemptIdRef = useRef<number | null>(null);
-  const reportedEventsRef = useRef<Set<string>>(new Set());
+  const lastTabSwitchAtRef = useRef(0);
   const submitStartedRef = useRef(false);
   const lastSaveTimeRef = useRef(0);
 
@@ -73,15 +73,6 @@ export function StudentExam() {
         return;
       }
 
-      // Prevent duplicate reports for the same browser event.
-      const eventKey = `${type}:${Date.now()}:${reportedEventsRef.current.size}`;
-
-      if (reportedEventsRef.current.has(eventKey)) {
-        return;
-      }
-
-      reportedEventsRef.current.add(eventKey);
-
       setIncidentCounts((previous) => ({
         ...previous,
         [type]: previous[type] + 1,
@@ -93,6 +84,9 @@ export function StudentExam() {
           attemptIdRef.current,
           type,
         );
+        if (type === 'FULLSCREEN_EXIT') {
+          setNotice('Fullscreen exit detected and recorded.');
+        }
       } catch {
         setNotice(
           'A proctoring incident could not be sent to the server. Check your connection.',
@@ -151,23 +145,37 @@ export function StudentExam() {
     };
   }, [token, examId]);
 
-  // Record when the candidate switches away from the exam tab.
+  // Browsers often emit blur and visibilitychange for the same tab switch.
   useEffect(() => {
     if (!exam || exam.status !== 'IN_PROGRESS') return;
 
+    function reportTabSwitch() {
+      const now = Date.now();
+      if (now - lastTabSwitchAtRef.current < 250) return;
+
+      lastTabSwitchAtRef.current = now;
+      void reportIncident('TAB_SWITCH');
+    }
+
     function handleVisibilityChange() {
       if (document.visibilityState === 'hidden') {
-        void reportIncident('TAB_SWITCH');
+        reportTabSwitch();
       }
     }
 
+    function handleWindowBlur() {
+      reportTabSwitch();
+    }
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('blur', handleWindowBlur);
 
     return () => {
       document.removeEventListener(
         'visibilitychange',
         handleVisibilityChange,
       );
+      window.removeEventListener('blur', handleWindowBlur);
     };
   }, [exam, reportIncident]);
 
