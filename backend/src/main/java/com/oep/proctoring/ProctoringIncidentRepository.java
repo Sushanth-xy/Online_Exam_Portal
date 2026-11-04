@@ -11,4 +11,7 @@ public interface ProctoringIncidentRepository
 
     List<ProctoringIncident> findByAttemptStudentEmailOrderByOccurredAtDesc(
             String studentEmail);
+
+    List<ProctoringIncident> findByAttemptExamCreatedByOrderByOccurredAtDesc(
+            String instructorEmail);
 }

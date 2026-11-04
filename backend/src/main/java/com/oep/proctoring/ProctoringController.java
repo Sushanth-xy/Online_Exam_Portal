@@ -52,4 +52,12 @@ public class ProctoringController {
     public List<ProctoringIncidentDTO> getAllIncidents() {
         return proctoringService.getAllIncidents();
     }
+
+    @GetMapping("/instructor/proctoring/incidents")
+    @PreAuthorize("hasAnyRole('INSTRUCTOR', 'ADMIN')")
+    public List<ProctoringIncidentDTO> getInstructorIncidents(
+            Authentication authentication) {
+        return proctoringService.getIncidentsForInstructor(
+                authentication.getName());
+    }
 }

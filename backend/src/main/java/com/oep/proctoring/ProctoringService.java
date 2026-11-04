@@ -70,4 +70,14 @@ public class ProctoringService {
                 .map(ProctoringIncidentDTO::new)
                 .toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<ProctoringIncidentDTO> getIncidentsForInstructor(
+            String instructorEmail) {
+        return incidentRepository
+                .findByAttemptExamCreatedByOrderByOccurredAtDesc(instructorEmail)
+                .stream()
+                .map(ProctoringIncidentDTO::new)
+                .toList();
+    }
 }
