@@ -63,7 +63,8 @@ public class ExamService {
                 .orElseThrow(() -> new IllegalArgumentException("Exam not found with id: " + id));
     }
 
-    @Transactional
+    // CHANGED: noRollbackFor keeps the TIMED_OUT status saved even though an error is thrown
+    @Transactional(noRollbackFor = IllegalStateException.class)
     public ExamCandidateViewDTO startExamAttempt(Long examId, String studentEmail) {
         Exam exam = getExamById(examId);
         LocalDateTime now = LocalDateTime.now();
@@ -120,7 +121,8 @@ public class ExamService {
         );
     }
 
-    @Transactional
+    // CHANGED: noRollbackFor keeps the TIMED_OUT status saved even though an error is thrown
+    @Transactional(noRollbackFor = IllegalStateException.class)
     public Map<String, Object> autosave(Long examId, AutosaveRequest request, String studentEmail) {
         ExamAttempt attempt = examAttemptRepository.findByExamIdAndStudentEmail(examId, studentEmail)
                 .orElseThrow(() -> new IllegalArgumentException("No active attempt found for exam id: " + examId));
