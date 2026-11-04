@@ -313,6 +313,11 @@ public class SecurityLockoutTest {
                         .content(objectMapper.writeValueAsString(new ResetPasswordRequest(token, "FirstNewPass123"))))
                 .andExpect(status().isOk());
 
+        PasswordResetToken usedToken =
+                passwordResetTokenRepository.findByToken(token).orElseThrow();
+        assertThat(usedToken.isUsed()).isTrue();
+        assertThat(usedToken.isValid()).isFalse();
+
         // Second use: 400 Bad Request
         mockMvc.perform(post("/api/v1/auth/reset-password")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -332,7 +337,8 @@ public class SecurityLockoutTest {
                 user,
                 LocalDateTime.now().minusMinutes(2)
         );
-        passwordResetTokenRepository.save(expiredToken);
+        PasswordResetToken savedToken = passwordResetTokenRepository.save(expiredToken);
+        assertThat(savedToken.isValid()).isFalse();
 
         mockMvc.perform(post("/api/v1/auth/reset-password")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -369,16 +375,27 @@ public class SecurityLockoutTest {
     // =========================================================================
 
     @Test
-    @DisplayName("TC-Sec-05: Expired JWT tokens are rejected as invalid")
-    void testExpiredJwtTokensRejected() {
+    @DisplayName("TC-Sec-05: Expired JWT tokens are rejected by protected API requests")
+    void testExpiredJwtTokensRejected() throws Exception {
+        registerUser("expireduser@example.com", "CorrectPassword123");
+        User user = userRepository.findByEmail("expireduser@example.com").orElseThrow();
+        String validToken = jwtService.generateToken(user);
+
+        mockMvc.perform(get("/api/v1/auth/me")
+                        .header("Authorization", "Bearer " + validToken))
+                .andExpect(status().isOk());
+
         SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
         String expiredToken = Jwts.builder()
-                .subject("expireduser@example.com")
+                .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis() - 7200_000))
                 .expiration(new Date(System.currentTimeMillis() - 3600_000))
                 .signWith(key)
                 .compact();
 
         assertThat(jwtService.isTokenValid(expiredToken, "expireduser@example.com")).isFalse();
+        mockMvc.perform(get("/api/v1/auth/me")
+                        .header("Authorization", "Bearer " + expiredToken))
+                .andExpect(status().isUnauthorized());
     }
 }
