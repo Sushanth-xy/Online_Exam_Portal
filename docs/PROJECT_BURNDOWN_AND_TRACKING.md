@@ -136,17 +136,12 @@ In accordance with **STP Section 9**, each team member is assigned exactly **26 
 
 ---
 
-## 5. Setting Up GitHub Projects V2 Board (Cloud Board)
+## 5. Live GitHub Project Board (Cloud Kanban)
 
-If you wish to view this as an interactive Kanban / Roadmap board directly on GitHub:
+The project board is created, linked to the repository, and populated with all 24 issues:
 
-1. **Navigate to GitHub Projects:**
-   Go to [https://github.com/users/Sushanth-xy/projects](https://github.com/users/Sushanth-xy/projects)
-2. **Create New Project:**
-   Click **"New project"** -> Select **"Team Backlog"** or **"Board"** template.
-3. **Link Repository:**
-   Click **"Add items"** -> Search `repo:Sushanth-xy/Online_Exam_Portal_SE` -> Add all 24 issues.
-4. **Configure Views:**
-   - **Sprint 1 Board:** Filter by `milestone:"Sprint 1: Core Portal & Exam Engine MVP"` (All column items in `Done`).
-   - **Sprint 2 Board:** Filter by `milestone:"Sprint 2: Grading, Proctoring, Admin & Hardening"`.
-   - **Insights / Burn-up:** Enable the built-in "Insights" tab in GitHub Projects to view real-time point burndown.
+- **Live Project URL:** [https://github.com/users/Sushanth-xy/projects/4](https://github.com/users/Sushanth-xy/projects/4)
+- **Repository Projects Tab:** Accessible directly from [Online_Exam_Portal_SE / Projects](https://github.com/Sushanth-xy/Online_Exam_Portal_SE/projects)
+- **Status Columns:**
+  - **Done:** 17 issues (All 12 Sprint 1 issues + Sprint 2 issues #14, #15, #16, #20, #24)
+  - **Todo:** 7 issues (#17, #18, #19, #21, #22, #23, #25)
