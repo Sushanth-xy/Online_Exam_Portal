@@ -1,0 +1,354 @@
+.student-dashboard-page {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #1e293b;
+}
+
+.student-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.student-navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  text-decoration: none;
+}
+
+.student-navbar-brand span {
+  font-size: 1.5rem;
+}
+
+.student-navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.student-user-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  background-color: #f1f5f9;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+}
+
+.student-role-badge {
+  background-color: #2563eb;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.student-logout-btn {
+  background-color: transparent;
+  color: #ef4444;
+  border: 1px solid #fecaca;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.student-logout-btn:hover {
+  background-color: #fee2e2;
+  border-color: #ef4444;
+}
+
+.student-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.student-hero {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  color: #ffffff;
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.student-hero h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  font-weight: 800;
+}
+
+.student-hero p {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.05rem;
+  opacity: 0.9;
+  max-width: 650px;
+}
+
+.student-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.student-stat-card {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.student-stat-number {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.student-stat-label {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.student-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.student-section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.student-refresh-btn {
+  background-color: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  padding: 0.45rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.student-refresh-btn:hover {
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+.student-exams-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.student-exam-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.student-exam-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.08);
+}
+
+.student-exam-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+}
+
+.student-exam-card-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.badge-active {
+  background-color: #dcfce7;
+  color: #15803d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.badge-upcoming {
+  background-color: #fef9c3;
+  color: #a16207;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.badge-closed {
+  background-color: #f1f5f9;
+  color: #64748b;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+.student-exam-card-desc {
+  color: #64748b;
+  font-size: 0.925rem;
+  line-height: 1.4;
+  margin: 0 0 1.25rem 0;
+  flex-grow: 1;
+}
+
+.student-exam-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  background-color: #f8fafc;
+  padding: 0.85rem;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+  font-size: 0.85rem;
+}
+
+.student-meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.student-meta-label {
+  color: #64748b;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  margin-bottom: 0.15rem;
+}
+
+.student-meta-value {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.student-card-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.btn-start-exam {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #2563eb;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  text-align: center;
+  transition: background-color 0.15s ease-in-out;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-start-exam:hover {
+  background-color: #1d4ed8;
+}
+
+.btn-start-exam:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.btn-secondary-exam {
+  background-color: #ffffff;
+  color: #334155;
+  border: 1px solid #cbd5e1;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-secondary-exam:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.student-info-card {
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.student-info-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e40af;
+  margin: 0 0 0.75rem 0;
+}
+
+.student-info-list {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: #1e3a8a;
+  font-size: 0.925rem;
+  line-height: 1.6;
+}
+
+.student-empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background-color: #ffffff;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  color: #64748b;
+}
+
+.student-empty-state p {
+  margin: 0.5rem 0 0 0;
+}

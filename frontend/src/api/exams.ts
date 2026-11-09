@@ -27,6 +27,7 @@ export interface Exam {
   negativeMarkingFactor: number;
   shuffleQuestions: boolean;
   questionIds?: number[];
+  questions?: unknown[];
 }
 
 export interface CandidateQuestion {
