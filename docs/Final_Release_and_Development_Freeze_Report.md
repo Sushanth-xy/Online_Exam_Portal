@@ -123,6 +123,21 @@ Full accessibility compliance remains unverified.
 | NF-002 | 500-user concurrency target unverified | Perform a load test before claiming compliance |
 | SR-001 | TLS enforcement unverified | Verify deployment configuration |
 
+## Instructor Module Demonstration
+
+**Recording:** [Watch Instructor Module Demo](https://drive.google.com/file/d/1uA8at7mesi-GzgIpfQj7D-ao4OLLq3n1/view?usp=sharing)
+
+The instructor module demonstration covers:
+- Instructor dashboard and navigation.
+- Question creation and management.
+- Exam creation and configuration.
+- Exam preview.
+- Available proctoring incident interface.
+
+**Scope:** This recording covers the instructor module only.
+Student, grading, and administrative workflows require additional
+demonstration evidence to satisfy the complete-product demo requirement.
+
 ## 8. Final Release Assessment
 
 The project has a substantial implementation and automated testing baseline. The recorded backend regression run completed successfully, with one intentionally skipped test.
