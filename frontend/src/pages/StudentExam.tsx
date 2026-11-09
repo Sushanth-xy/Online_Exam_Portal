@@ -15,6 +15,7 @@ import {
   submitExam,
   type CandidateExam,
 } from '../api/exams';
+import './StudentExam.css';
 
 type IncidentType = 'TAB_SWITCH' | 'FULLSCREEN_EXIT';
 

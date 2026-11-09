@@ -12,6 +12,11 @@ vi.mock('../api/proctoring', () => ({
   getInstructorProctoringIncidents: vi.fn(),
 }));
 
+vi.mock('../api/grading', () => ({
+  getSubmissions: vi.fn().mockResolvedValue([]),
+  gradeSubmission: vi.fn(),
+}));
+
 describe('InstructorDashboard proctoring monitoring', () => {
   beforeEach(() => {
     vi.mocked(getInstructorProctoringIncidents).mockResolvedValue([
