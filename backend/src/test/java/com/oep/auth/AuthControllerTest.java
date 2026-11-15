@@ -4,6 +4,7 @@ package com.oep.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oep.auth.dto.LoginRequest;
 import com.oep.auth.dto.RegisterRequest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -222,5 +223,11 @@ public class AuthControllerTest {
         mockMvc.perform(get("/api/v1/admin/dashboard")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isForbidden());
+    }
+
+    @AfterEach
+    void tearDown() {
+        passwordResetTokenRepository.deleteAll();
+        userRepository.deleteAll();
     }
 }

@@ -10,6 +10,7 @@ import com.oep.questionbank.Difficulty;
 import com.oep.questionbank.Question;
 import com.oep.questionbank.QuestionRepository;
 import com.oep.questionbank.QuestionType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,5 +79,13 @@ public class TimeoutGradingProbeTest {
         assertThat(saved.getStatus()).isEqualTo(AttemptStatus.TIMED_OUT);
         // Expected: 4.0 (the saved answer is correct). A defect would show 0.0
         assertThat(saved.getTotalScore()).isEqualTo(4.0);
+    }
+
+    @AfterEach
+    void tearDown() {
+        examAttemptRepository.deleteAll();
+        examRepository.deleteAll();
+        questionRepository.deleteAll();
+        userRepository.deleteAll();
     }
 }

@@ -5,6 +5,8 @@ import com.oep.auth.Role;
 import com.oep.auth.User;
 import com.oep.auth.UserRepository;
 import com.oep.auth.dto.LoginRequest;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,20 @@ class QuestionBankApiTest {
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
     @Autowired private UserRepository userRepository;
+    @Autowired private QuestionRepository questionRepository;
     @Autowired private PasswordEncoder passwordEncoder;
+
+    @BeforeEach
+    void clean() {
+        questionRepository.deleteAll();
+        userRepository.deleteAll();
+    }
+
+    @AfterEach
+    void tearDown() {
+        questionRepository.deleteAll();
+        userRepository.deleteAll();
+    }
 
     // Makes an instructor, logs in, returns the token
     private String instructorToken() throws Exception {

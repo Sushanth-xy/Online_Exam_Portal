@@ -6,6 +6,7 @@ import com.oep.auth.dto.LoginRequest;
 import com.oep.auth.dto.RegisterRequest;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -324,5 +325,11 @@ class AuthRbacIntegrationTest {
                 .expiration(new Date(System.currentTimeMillis() - 60_000))
                 .signWith(realKey).compact();
         assertBlocked(getWithToken(STUDENT_PROBE, expired));
+    }
+
+    @AfterEach
+    void tearDown() {
+        passwordResetTokenRepository.deleteAll();
+        userRepository.deleteAll();
     }
 }

@@ -14,6 +14,8 @@ import com.oep.questionbank.Difficulty;
 import com.oep.questionbank.Question;
 import com.oep.questionbank.QuestionRepository;
 import com.oep.questionbank.QuestionType;
+import com.oep.proctoring.ProctoringIncidentRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,6 +65,9 @@ public class AuditTrailAndRetentionTest {
     private QuestionRepository questionRepository;
 
     @Autowired
+    private ProctoringIncidentRepository proctoringIncidentRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -82,6 +87,7 @@ public class AuditTrailAndRetentionTest {
     @BeforeEach
     void setUp() {
         auditLogRepository.deleteAll();
+        proctoringIncidentRepository.deleteAll();
         examAttemptRepository.deleteAll();
         examRepository.deleteAll();
         questionRepository.deleteAll();
@@ -94,6 +100,16 @@ public class AuditTrailAndRetentionTest {
         adminToken = jwtService.generateToken(adminUser);
         instructorToken = jwtService.generateToken(instructorUser);
         studentToken = jwtService.generateToken(studentUser);
+    }
+
+    @AfterEach
+    void tearDown() {
+        auditLogRepository.deleteAll();
+        proctoringIncidentRepository.deleteAll();
+        examAttemptRepository.deleteAll();
+        examRepository.deleteAll();
+        questionRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     // =========================================================================

@@ -9,6 +9,7 @@ import com.oep.exam.dto.AutosaveAnswerItem;
 import com.oep.exam.dto.AutosaveRequest;
 import com.oep.exam.dto.ExamCreateRequest;
 import com.oep.questionbank.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -311,5 +312,13 @@ public class ExamDeliveryTest {
         assertThat(attempt.getStatus()).isEqualTo(AttemptStatus.COMPLETED);
         assertThat(attempt.getSubmittedAt()).isNotNull();
         assertThat(attempt.getTotalScore()).isEqualTo(3.5);
+    }
+
+    @AfterEach
+    void tearDown() {
+        examAttemptRepository.deleteAll();
+        examRepository.deleteAll();
+        questionRepository.deleteAll();
+        userRepository.deleteAll();
     }
 }

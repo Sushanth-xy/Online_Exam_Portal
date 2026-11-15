@@ -11,6 +11,7 @@ import com.oep.questionbank.Difficulty;
 import com.oep.questionbank.Question;
 import com.oep.questionbank.QuestionRepository;
 import com.oep.questionbank.QuestionType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -119,5 +120,13 @@ public class ExamCreationApiTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest());
+    }
+
+    @AfterEach
+    void tearDown() {
+        examAttemptRepository.deleteAll();
+        examRepository.deleteAll();
+        questionRepository.deleteAll();
+        userRepository.deleteAll();
     }
 }

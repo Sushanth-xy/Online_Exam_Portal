@@ -5,6 +5,7 @@ import com.oep.auth.dto.ForgotPasswordRequest;
 import com.oep.auth.dto.LoginRequest;
 import com.oep.auth.dto.RegisterRequest;
 import com.oep.auth.dto.ResetPasswordRequest;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -397,5 +398,11 @@ public class SecurityLockoutTest {
         mockMvc.perform(get("/api/v1/auth/me")
                         .header("Authorization", "Bearer " + expiredToken))
                 .andExpect(status().isUnauthorized());
+    }
+
+    @AfterEach
+    void tearDown() {
+        passwordResetTokenRepository.deleteAll();
+        userRepository.deleteAll();
     }
 }

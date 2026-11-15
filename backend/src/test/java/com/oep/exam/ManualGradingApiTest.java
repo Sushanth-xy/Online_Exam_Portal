@@ -11,6 +11,7 @@ import com.oep.questionbank.Difficulty;
 import com.oep.questionbank.Question;
 import com.oep.questionbank.QuestionRepository;
 import com.oep.questionbank.QuestionType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -152,5 +153,13 @@ public class ManualGradingApiTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isForbidden());
+    }
+
+    @AfterEach
+    void tearDown() {
+        examAttemptRepository.deleteAll();
+        examRepository.deleteAll();
+        questionRepository.deleteAll();
+        userRepository.deleteAll();
     }
 }

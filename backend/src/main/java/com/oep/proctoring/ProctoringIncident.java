@@ -3,6 +3,8 @@ package com.oep.proctoring;
 
 import com.oep.exam.ExamAttempt;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,6 +17,7 @@ public class ProctoringIncident {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "attempt_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private ExamAttempt attempt;
 
     @Enumerated(EnumType.STRING)

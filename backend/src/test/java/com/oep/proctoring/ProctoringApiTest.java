@@ -9,6 +9,7 @@ import com.oep.exam.Exam;
 import com.oep.exam.ExamAttempt;
 import com.oep.exam.ExamAttemptRepository;
 import com.oep.exam.ExamRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,6 +78,14 @@ class ProctoringApiTest {
                 new ExamAttempt(instructorExam, STUDENT_EMAIL));
         otherInstructorAttempt = attemptRepository.save(
                 new ExamAttempt(otherExam, STUDENT_EMAIL));
+    }
+
+    @AfterEach
+    void tearDown() {
+        incidentRepository.deleteAll();
+        attemptRepository.deleteAll();
+        examRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     @Test
