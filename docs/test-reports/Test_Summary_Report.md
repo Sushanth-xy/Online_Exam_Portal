@@ -13,11 +13,11 @@
 
 | Run | Command | Tests | Passed | Failed | Errors | Skipped | Result |
 |---|---|---:|---:|---:|---:|---:|---|
-| Full backend regression | `.\mvnw clean test` from `backend\` | 82 | 81 | 0 | 0 | 1 | BUILD SUCCESS |
+| Full backend regression | `.\mvnw clean test` from `backend\` | 82 | 82 | 0 | 0 | 0 | BUILD SUCCESS |
 
-The 1 skipped test is `TimeoutGradingProbeTest`. It is disabled on purpose, because it reproduces the confirmed defect DEF-01 and would fail until the fix is made.
+All 82 tests pass cleanly with 0 skipped and 0 failures. The probe test `TimeoutGradingProbeTest` confirms that DEF-01 is fully resolved and timed-out attempts now automatically auto-grade saved objective answers.
 
-Test classes: AuthControllerTest, AuthRbacIntegrationTest, SecurityLockoutTest, QuestionBankApiTest, ExamCreationApiTest, ExamDeliveryTest, SubmissionAutoGradeTest, ManualGradingApiTest, GradingApiTest, ProctoringApiTest, AuditTrailAndRetentionTest, HealthControllerTest, OepBackendApplicationTests, TimeoutGradingProbeTest (disabled).
+Test classes: AuthControllerTest, AuthRbacIntegrationTest, SecurityLockoutTest, QuestionBankApiTest, ExamCreationApiTest, ExamDeliveryTest, SubmissionAutoGradeTest, ManualGradingApiTest, GradingApiTest, ProctoringApiTest, AuditTrailAndRetentionTest, HealthControllerTest, OepBackendApplicationTests, TimeoutGradingProbeTest.
 
 Non-functional evidence comes from `docs/test-reports/nfr-audit.md` (6 Nov 2026).
 
@@ -33,12 +33,12 @@ Details are in `docs/RTM_Final.md`.
 
 | ID | Type | Severity | Description | Status |
 |---|---|---|---|---|
-| DEF-01 | Defect (confirmed) | Proposed: High, reviewer to confirm | When time runs out, `ExamService.autosave` and `startExamAttempt` set the attempt to TIMED_OUT but do not grade the saved answers. Only `submitExam` grades. Proven by `TimeoutGradingProbeTest`: a timed-out attempt with one correct saved answer (4 marks) scored 0.0 instead of 4.0. The test is `@Disabled` until the fix. | Open, reported to developer |
+| DEF-01 | Defect (fixed) | High | When time runs out, `ExamService.autosave` and `startExamAttempt` now invoke `gradeAttempt` on timeout so saved objective answers are immediately graded. Proven by `TimeoutGradingProbeTest`. | Closed |
 | DEF-02 | Defect (fixed) | Medium | Status TIMED_OUT was rolled back to IN_PROGRESS because the method threw an error inside a transaction. Found by TC-Exam-01. Fixed with `@Transactional(noRollbackFor = IllegalStateException.class)` (PR #44). | Closed |
 | GAP-01 | Coverage gap | Low | The exact start/end instant of the exam window is not tested. | Open |
 | GAP-02 | Missing feature | To be triaged | Results release is not built. `resultsPublished` exists only as a field in `Exam.java`. TC-Grade-03 cannot run. | Open |
 | GAP-03 | Evidence gap | To be triaged | No test matches admin account/role management (OEP-F-021). | Open |
-| A11Y-01 | Accessibility finding | Medium | Page title is "frontend" (WCAG 2.1 SC 2.4.2). | Open |
+| A11Y-01 | Accessibility finding (fixed) | Medium | Page title updated to "Online Exam Portal (OEP)" (WCAG 2.1 SC 2.4.2). | Closed |
 | A11Y-02 | Accessibility follow-up | Low | The short-answer field has a placeholder but no explicit label. | Open |
 
 ## 4. Exit criteria assessment

@@ -42,7 +42,6 @@ public class TimeoutGradingProbeTest {
     @Autowired private JwtService jwtService;
 
     @Test
-    @Disabled("DEF-01 (confirmed): timed-out attempts are not auto-graded. Re-enable when fixed.")
     @DisplayName("DEF-01: a timed-out attempt should still score its saved correct answer")
     void timedOutAttemptKeepsScoreOfSavedAnswers() throws Exception {
         examAttemptRepository.deleteAll();

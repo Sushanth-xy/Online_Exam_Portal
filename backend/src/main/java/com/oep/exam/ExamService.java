@@ -97,6 +97,7 @@ public class ExamService {
         if (remainingSeconds <= 0) {
             attempt.setStatus(AttemptStatus.TIMED_OUT);
             attempt.setSubmittedAt(now);
+            gradeAttempt(attempt, exam);
             examAttemptRepository.save(attempt);
             throw new IllegalStateException("Exam duration has expired.");
         }
@@ -137,6 +138,7 @@ public class ExamService {
         if (now.isAfter(expiryTime)) {
             attempt.setStatus(AttemptStatus.TIMED_OUT);
             attempt.setSubmittedAt(now);
+            gradeAttempt(attempt, attempt.getExam());
             examAttemptRepository.save(attempt);
             throw new IllegalStateException("Exam duration expired. Attempt automatically submitted.");
         }
@@ -179,7 +181,13 @@ public class ExamService {
         attempt.setSubmittedAt(now);
 
         // Instant Auto-Grading for Objective Questions (SRS OEP-F-016 / TC-Grade-01)
-        Exam exam = attempt.getExam();
+        gradeAttempt(attempt, attempt.getExam());
+
+        return examAttemptRepository.save(attempt);
+    }
+
+    private void gradeAttempt(ExamAttempt attempt, Exam exam) {
+        if (exam == null || attempt.getAnswers() == null) return;
         Map<Long, Question> questionMap = exam.getQuestions().stream()
                 .collect(Collectors.toMap(Question::getId, q -> q));
 
@@ -219,8 +227,6 @@ public class ExamService {
             double percentage = (totalScore / totalMarks) * 100.0;
             attempt.setPassed(percentage >= exam.getPassPercentage());
         }
-
-        return examAttemptRepository.save(attempt);
     }
 
     public ExamCandidateViewDTO getActiveAttempt(Long examId, String studentEmail) {

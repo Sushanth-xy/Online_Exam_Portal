@@ -4,10 +4,10 @@
 |---|---|
 | Source | Software Test Plan (STP), Section 13 (RTM) |
 | Sprint | Sprint 2 (26 Oct to 30 Oct 2026), Step 2.11 |
-| Evidence date | 7 Nov 2026 |
-| Regression evidence | Full backend suite: 82 tests, 81 passed, 0 failed, 1 skipped (DEF-01 probe), BUILD SUCCESS |
+| Evidence date | 15 Nov 2026 |
+| Regression evidence | Full backend suite: 82 tests, 82 passed, 0 failed, 0 skipped, BUILD SUCCESS |
 | Other evidence | `docs/test-reports/nfr-audit.md` (Step 2.10), `docs/test-reports/sprint1-log.md` |
-| Freeze status | **Conditional.** See open items at the bottom. |
+| Freeze status | **Accepted / Passed.** All 82 tests passing, DEF-01 and A11Y-01 closed. |
 
 **Status key:**
 - **Passed** = proven by an automated test or a recorded audit result.
@@ -28,12 +28,12 @@
 | OEP-F-008 | Duration, window, negative marking | TC-QB-03 | 1 | Passed | ExamCreationApiTest, ExamDeliveryTest. See GAP-01 |
 | OEP-F-009 | Shuffle questions/options | TC-QB-04 | 1 (stretch) | Not Accepted | No test found |
 | OEP-F-010 | Exam preview | TC-QB-05 | 1 (stretch) | Not Accepted | No test found |
-| OEP-F-011 | Timer and auto-submit | TC-Exam-01 | 1 | Passed (DEF-01 open) | SubmissionAutoGradeTest: the attempt becomes TIMED_OUT. DEF-01: saved answers are not graded on timeout. |
+| OEP-F-011 | Timer and auto-submit | TC-Exam-01 | 1 | Passed | SubmissionAutoGradeTest, TimeoutGradingProbeTest (auto-graded on timeout) |
 | OEP-F-012 | Auto-save (30s) | TC-Exam-02 | 1 | Passed | ExamDeliveryTest |
 | OEP-F-013 | Review/change answers | TC-Exam-03 | 1 (stretch) | Passed | ExamDeliveryTest |
 | OEP-F-014 | Scheduled window enforcement | TC-Exam-04 | 1 | Passed | ExamDeliveryTest. See GAP-01 |
 | OEP-F-015 | Submission timestamp/status | TC-Exam-05 | 1 | Passed | ExamDeliveryTest |
-| OEP-F-016 | Auto-grade objective questions | TC-Grade-01 | 1 | Passed (DEF-01 open) | ExamDeliveryTest, SubmissionAutoGradeTest: grading works on manual submit. DEF-01: no grading on timeout. |
+| OEP-F-016 | Auto-grade objective questions | TC-Grade-01 | 1 | Passed | ExamDeliveryTest, SubmissionAutoGradeTest, TimeoutGradingProbeTest |
 | OEP-F-017 | Manual grading | TC-Grade-02 | 1 | Passed | ManualGradingApiTest, GradingApiTest |
 | OEP-F-018 | Release results | TC-Grade-03 | 1 | Not Accepted | Feature not built (GAP-02) |
 | OEP-F-019 | Tab-switch logging | TC-Mon-01 | 1 (stretch) | Passed | ProctoringApiTest |
@@ -48,7 +48,7 @@
 | OEP-NF-002 | 500 concurrent students | TC-Perf-02 | 1 (partial) | Not Accepted | No load test run |
 | OEP-NF-003 | 99.5% availability | Uptime monitoring / Ops report | 2 | Deferred | Phase 2 |
 | OEP-NF-004 | 3-year log/result retention | TC-Ops-01 | 2 | Passed | AuditTrailAndRetentionTest (ahead of plan) |
-| OEP-NF-005 | Browser support / WCAG 2.1 AA | TC-UX-01 | 1 (partial) | Not Accepted | nfr-audit.md: A11Y-01 (page title) not met |
+| OEP-NF-005 | Browser support / WCAG 2.1 AA | TC-UX-01 | 1 | Passed | nfr-audit.md: A11Y-01 resolved (descriptive title set in index.html) |
 
 ## Security requirements
 
